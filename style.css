@@ -19,6 +19,7 @@ main {
   padding: 2em;
 }
 
+/* Timeline Game Styles */
 #timeline {
   display: flex;
   justify-content: space-around;
@@ -38,7 +39,6 @@ main {
   gap: 1em;
 }
 
-
 .card {
   background: #ffffff;
   border: 2px solid #ccc;
@@ -46,4 +46,91 @@ main {
   width: 200px;
   cursor: grab;
   transition: border 0.3s ease;
+}
+
+/* Main Menu Styles */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  margin-top: 3em;
+}
+
+.menu button {
+  font-size: 1.2em;
+  padding: 1em 2em;
+  border: none;
+  border-radius: 8px;
+  background-color: #00796b;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menu button:hover {
+  background-color: #004d40;
+}
+
+/* Image Game Styles */
+.image-game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2em;
+  padding: 2em;
+}
+
+.image-question {
+  max-width: 400px;
+  width: 100%;
+  border: 3px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.feedback-message {
+  font-size: 1.2em;
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+.restart-button {
+  padding: 0.5em 1em;
+  font-size: 1em;
+  margin: 1em auto;
+  display: block;
+  background-color: #004d40;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.restart-button:hover {
+  background-color: #00796b;
+}
+
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-top: 1em;
+}
+
+.choices button {
+  font-size: 1em;
+  padding: 0.75em 1em;
+  border: 1px solid #004d40;
+  background-color: white;
+  color: #004d40;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.choices button:hover {
+  background-color: #004d40;
+  color: white;
 }
