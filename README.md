@@ -17,4 +17,4 @@ salento-timeline-game/
 
 
 
-https://motazsaad.github.io/salento-timeline-game/
+https://salento-city-verse.github.io/salento-timeline-game/
