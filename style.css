@@ -18,6 +18,40 @@ main {
   align-items: center;
   padding: 2em;
 }
+/* Remove default list styling */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Style for feature buttons */
+.feature-button {
+  display: inline-block;
+  background-color: #004d40;
+  color: white;
+  font-size: 16px;
+  padding: 10px 20px;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  margin: 10px;
+}
+
+.feature-button:hover {
+  background-color: #00796b;
+}
+
+/* Additional styling for the container to center the buttons */
+#test-your-knowledge ul, #explore-features ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 
 /* Timeline Game Styles */
 #timeline {
