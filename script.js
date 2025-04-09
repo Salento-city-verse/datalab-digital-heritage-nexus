@@ -1,6 +1,6 @@
 window.onload = () => {
   // Fetch events from the events.json file
-  fetch('data/events.json')
+  fetch('events.json')
     .then(response => response.json())
     .then(events => {
       const cardContainer = document.getElementById('cards');
