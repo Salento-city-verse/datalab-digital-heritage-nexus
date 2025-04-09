@@ -2,7 +2,7 @@
 
 # Basic Project Structure
 
-'''plaintext 
+```plaintext 
 salento-timeline-game/
 │
 ├── index.html          # Main HTML file
@@ -13,4 +13,4 @@ salento-timeline-game/
 ├── assets/
 │   └── images/         # (Optional) images for events
 │   └── audio/          # (Optional) background music or effects
-'''
+```
