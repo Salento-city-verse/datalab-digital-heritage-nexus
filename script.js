@@ -5,7 +5,6 @@ window.onload = () => {
     .then(events => {
       const cardContainer = document.getElementById('cards');
       const timeline = document.getElementById('timeline');
-      const messageContainer = document.getElementById('message'); // Message display
 
       // Shuffle and create cards
       const shuffled = events.sort(() => 0.5 - Math.random());
@@ -56,13 +55,8 @@ window.onload = () => {
         if (JSON.stringify(placedIds) === JSON.stringify(ordered) && placed.length === events.length) {
           setTimeout(() => alert("Bravo! You ordered all events correctly!"), 100);
         } else {
-          showIncorrectOrderMessage(); // Show message for incorrect order
+          setTimeout(() => alert("The order is incorrect. Please try again!"), 100); // Alert for incorrect order
         }
-      }
-
-      // Function to show a message when order is incorrect
-      function showIncorrectOrderMessage() {
-        messageContainer.innerHTML = '<p style="color: red; font-size: 18px;">The order is incorrect. Please try again!</p>';
       }
     })
     .catch(error => console.error('Error loading events:', error));
