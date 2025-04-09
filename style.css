@@ -38,11 +38,12 @@ main {
   gap: 1em;
 }
 
+
 .card {
   background: #ffffff;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   padding: 1em;
   width: 200px;
   cursor: grab;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  transition: border 0.3s ease;
 }
