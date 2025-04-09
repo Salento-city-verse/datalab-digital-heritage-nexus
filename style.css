@@ -94,6 +94,22 @@ main {
   font-weight: bold;
   text-align: center;
 }
+.restart-button {
+  padding: 0.5em 1em;
+  font-size: 1em;
+  margin: 1em auto;
+  display: block;
+  background-color: #004d40;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.restart-button:hover {
+  background-color: #00796b;
+}
 
 
 .choices {
