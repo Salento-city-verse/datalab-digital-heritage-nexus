@@ -73,7 +73,7 @@ window.onload = () => {
       const cardId = parseInt(cardElem.id.replace('card-', ''));
       const expected = events.slice(0).sort((a, b) => a.year - b.year)[index]?.id;
       if (cardId === expected) {
-        cardElem.style.border = "2px solid green";
+        cardElem.style.border = "2px solid blue";
       } else {
         cardElem.style.border = "2px solid red";
       }
