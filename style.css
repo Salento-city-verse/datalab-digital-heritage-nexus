@@ -316,6 +316,12 @@ ul {
 }
 
 
+a-scene {
+  width: 100%;
+  height: 400px;
+  margin: 2em 0;
+  border-radius: 10px;
+}
 
 
 
@@ -345,13 +351,24 @@ ul {
 }
 
 #monuments-list {
-  list-style: none;
-  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
 }
 
-#monuments-list li {
-  margin: 1em 0;
+.monument {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 1.7rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  padding: 1.5em;
+  text-align: center;
+  display: flex;
+
 }
+
 
 .feature-button {
   background-color: #00796b;
@@ -404,23 +421,7 @@ footer {
   text-align: center;
 }
 
-#monuments-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 2em;
-  margin-top: 2em;
-}
 
-.monument {
-  background-color: #ffffff;
-  padding: 1.5em;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
 
 .monument-info {
   flex: 1;
