@@ -57,36 +57,6 @@
           </div>
         </div>
       </div>
-
-
-     <!-- VR 3D Preview Panel -->
-<section id="vr-preview">
-    <h3>Virtual Preview</h3>
-    <p>Experience cultural heritage virtually before your visit.</p>
-  
-    <a-scene embedded style="width: 100%; height: 500px;">
-        <!-- Assets -->
-        <a-assets>
-          <!-- BoomBox GLB Model -->
-          <a-asset-item id="boombox-model" src="assets/models/BoomBox.glb"></a-asset-item>
-        </a-assets>
-      
-        <!-- Load the model -->
-        <a-entity gltf-model="#boombox-model" position="0 0 -3" scale="50 50 50"></a-entity>
-      
-        <!-- Camera and cursor -->
-        <a-entity position="0 1.6 0">
-          <a-camera wasd-controls look-controls>
-            <a-cursor></a-cursor>
-          </a-camera>
-        </a-entity>
-      
-        <!-- Lighting -->
-        <a-light type="ambient" intensity="0.5"></a-light>
-        <a-light type="directional" position="1 1 1" intensity="0.5"></a-light>
-      </a-scene>
-  </section>
-  
   
     
 
