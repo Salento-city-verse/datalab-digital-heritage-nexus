@@ -58,22 +58,34 @@
       </div>
 
 
-      <div id="vr-panel">
-        <h3>Virtual Reality Preview</h3>
-        <p>Interact with a 3D model of the Roman Amphitheater below:</p>
-        <a-scene embedded style="height: 400px; width: 100%;">
-          <a-assets>
-            <a-asset-item id="roman-amphitheater" src="assets/models/example.glb"></a-asset-item>
-          </a-assets>
+     <!-- VR 3D Preview Panel -->
+<section id="vr-preview">
+    <h3>Virtual Preview</h3>
+    <p>Experience cultural heritage virtually before your visit.</p>
   
-          <a-entity gltf-model="#roman-amphitheater" position="0 0 -3" scale="0.5 0.5 0.5"></a-entity>
-          <a-sky color="#ECECEC"></a-sky>
+    <a-scene embedded style="width: 100%; height: 500px;">
+      <!-- Assets -->
+      <a-assets>
+        <!-- This is a known working GLB model hosted online -->
+        <a-asset-item id="test-model" src="https://cdn.aframe.io/test-models/models/Tree/Tree.glb" crossorigin="anonymous"></a-asset-item>
+      </a-assets>
   
-          <a-entity position="0 1.6 0" camera look-controls>
-            <a-entity cursor="fuse: true; max-distance: 5; fuse-timeout: 500"></a-entity>
-          </a-entity>
-        </a-scene>
-      </div>
+      <!-- Load the model -->
+      <a-entity gltf-model="#test-model" position="0 0 -4" scale="0.5 0.5 0.5"></a-entity>
+  
+      <!-- Camera and cursor -->
+      <a-entity position="0 1.6 0">
+        <a-camera wasd-controls look-controls>
+          <a-cursor></a-cursor>
+        </a-camera>
+      </a-entity>
+  
+      <!-- Lighting -->
+      <a-light type="ambient" intensity="0.7"></a-light>
+      <a-light type="directional" position="1 2 1" intensity="0.8"></a-light>
+    </a-scene>
+  </section>
+  
   
     
 
