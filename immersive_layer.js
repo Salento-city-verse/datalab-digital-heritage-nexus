@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
         "link": "https://turismo.puglia.it/lecce/laghi-alimini/"
       }
     ]
-  }; 
-  
+  };
+
   const tourContentDiv = document.getElementById('personalized-tour-content');
   const interestButtons = document.querySelectorAll('.interest-button');
 
@@ -85,10 +85,17 @@ document.addEventListener('DOMContentLoaded', () => {
         siteElement.classList.add('site-item');
         siteElement.innerHTML = `
           <h3>${site.name}</h3>
-          <img src="${site.image}" alt="${site.name}" />
+          <img src="${site.image}" alt="${site.name}" style="max-width:100%; height:auto;" />
           <p><strong>Location:</strong> ${site.location}</p>
           <p>${site.description}</p>
-          <a href="${site.link}" target="_blank">Learn more</a>
+          <div style="margin-top: 8px;">
+          <a href="${site.link}" target="_blank" style="margin-right: 12px; color: #FFFFFF;">Learn more</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.name + ', ' + site.location)}" target="_blank" style="color: #FFFFFF;">
+            <img src="https://static.vecteezy.com/system/resources/previews/009/589/758/original/location-location-pin-location-icon-transparent-free-png.png" alt="Map Pin Icon" style="width:40px; height:40px; vertical-align:middle; margin-right:4px;" />
+            Visit Site
+          </a>
+        </div>
+
         `;
         tourContentDiv.appendChild(siteElement);
       });
