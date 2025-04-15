@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discover Lecce - Sustainability Optimization</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h2 {
+      margin: 20px;
+    }
+
+    #map {
+      height: 500px;
+      width: 90%;
+      margin: 0 auto 20px auto;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+    }
+
+    #toggleBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #4285F4;
+      color: white;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      margin-bottom: 10px;
+    }
+
+    #toggleBtn:hover {
+      background-color: #357ae8;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Discover Lecce</h2>
+  <button id="toggleBtn">Switch to Street View</button>
+  <div id="map"></div>
+
+  <!-- Load Google Maps API -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap">
+  </script>
+<script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+  <script src="map.js"></script>
+  <div id="map-legend">
+    <h3>🏛️ Cultural Map Legend</h3>
+    <ul>
+      <li><span class="legend-icon" style="background-color: #8B4513;"></span> Churches & Basilicas</li>
+      <li><span class="legend-icon" style="background-color: #556B2F;"></span> City Gates</li>
+      <li><span class="legend-icon" style="background-color: #4682B4;"></span> Museums</li>
+      <li><span class="legend-icon" style="background-color: #DAA520;"></span> Monuments</li>
+    </ul>
+  </div>
+  <div id="map-filters">
+    <label><input type="checkbox" class="filter-checkbox" value="church" checked> Churches</label>
+    <label><input type="checkbox" class="filter-checkbox" value="gate" checked> City Gates</label>
+    <label><input type="checkbox" class="filter-checkbox" value="museum" checked> Museums</label>
+    <label><input type="checkbox" class="filter-checkbox" value="monument" checked> Monuments</label>
+  </div>
+  
+  
+</body>
+</html>
