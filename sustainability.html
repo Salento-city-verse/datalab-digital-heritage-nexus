@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sustainability Optimization Layer</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -16,21 +15,23 @@
 
   <main>
     <!-- Environmental Monitoring -->
-    <section id="environmental-monitoring">
-      <div id="current-conditions">
-        <h3>Current Environmental Conditions</h3>
-        <div id="current-data">
-          <!-- Dynamic data will be populated by JS -->
+    <section class="env-section">
+      <div class="env-title">
+        <h2>Current Environmental Conditions</h2>
+      </div>
+
+      <div class="env-widget">
+        <div data-aqi-widget-payload="https://www.aqi.in/widget?p=eyJvX3ciOjEsIm9fd190X3UiOiJjIiwib190IjoibCIsIndfdF9pIjoyLCJscyI6W3sicyI6Iml0YWx5In1dfQ==">
+          <script src="https://www.aqi.in/scripts/widget.min.js"></script>
         </div>
       </div>
 
-      <!-- Charts -->
-      <div id="charts">
+      <div class="env-charts">
         <h3>Environmental Data Visualization (Last 24 Hours)</h3>
-        <div class="chart-container">
+        <div class="chart-wrapper">
           <canvas id="airQualityChart"></canvas>
         </div>
-        <div class="chart-container">
+        <div class="chart-wrapper">
           <canvas id="temperatureChart"></canvas>
         </div>
       </div>
