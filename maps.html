@@ -36,6 +36,26 @@
       transition: background-color 0.3s;
       margin-bottom: 10px;
     }
+    #pano {
+        height: 500px;
+        width: 90%;
+        margin: 0 auto 20px auto;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      }
+
+      #place-autocomplete-card {
+        background: white;
+        border-radius: 8px;
+        padding: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        margin: 10px;
+      }
+
+      gmp-place-autocomplete {
+        width: 300px;
+      }
+
 
     #toggleBtn:hover {
       background-color: #357ae8;
@@ -44,9 +64,9 @@
 </head>
 <body>
 
-  <h2>Discover Lecce</h2>
-  <button id="toggleBtn">Switch to Street View</button>
+  <h2>🏛️ Discover Cultural Heritage in Lecce</h2>
   <div id="map"></div>
+  <div id="pano"></div>
 
   <!-- Load Google Maps API -->
   <script async defer
@@ -55,21 +75,16 @@
 <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
   <script src="map.js"></script>
   <div id="map-legend">
-    <h3>🏛️ Cultural Map Legend</h3>
+    <h3>Cultural Map Legend</h3>
     <ul>
-      <li><span class="legend-icon" style="background-color: #8B4513;"></span> Churches & Basilicas</li>
-      <li><span class="legend-icon" style="background-color: #556B2F;"></span> City Gates</li>
-      <li><span class="legend-icon" style="background-color: #4682B4;"></span> Museums</li>
-      <li><span class="legend-icon" style="background-color: #DAA520;"></span> Monuments</li>
+      <li><span class="legend-icon" style="background-color: red;"></span> Churches & Basilicas</li>
+      <li><span class="legend-icon" style="background-color: green;"></span> Parks</li>
+      <li><span class="legend-icon" style="background-color: brown;"></span> Museums</li>
+      <li><span class="legend-icon" style="background-color: orange;"></span> Monuments</li>
+      <li><span class="legend-icon" style="background-color: purple;"></span> Food </li>
+      <li><span class="legend-icon" style="background-color: blue;"></span> Medical Assistance</li>
     </ul>
   </div>
-  <div id="map-filters">
-    <label><input type="checkbox" class="filter-checkbox" value="church" checked> Churches</label>
-    <label><input type="checkbox" class="filter-checkbox" value="gate" checked> City Gates</label>
-    <label><input type="checkbox" class="filter-checkbox" value="museum" checked> Museums</label>
-    <label><input type="checkbox" class="filter-checkbox" value="monument" checked> Monuments</label>
-  </div>
-  
-  
+ 
 </body>
 </html>
