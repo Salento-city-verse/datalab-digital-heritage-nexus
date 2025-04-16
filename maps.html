@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Discover Lecce - Sustainability Optimization</title>
   <link rel="stylesheet" href="style.css" />
+  
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -37,58 +38,50 @@
       transition: background-color 0.3s;
       margin-bottom: 10px;
     }
+
     #pano {
-        height: 500px;
-        width: 90%;
-        margin: 0 auto 20px auto;
+      height: 500px;
+      width: 90%;
+      margin: 0 auto 20px auto;
       border: 2px solid #ccc;
       border-radius: 8px;
-      }
+    }
 
-      #place-autocomplete-card {
-        background: white;
-        border-radius: 8px;
-        padding: 8px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        margin: 10px;
-      }
+    #place-autocomplete-card {
+      background: white;
+      border-radius: 8px;
+      padding: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      margin: 10px;
+    }
 
-      gmp-place-autocomplete {
-        width: 300px;
-      }
-
+    gmp-place-autocomplete {
+      width: 300px;
+    }
 
     #toggleBtn:hover {
       background-color: #357ae8;
     }
   </style>
 </head>
+<!-- Add inside <head> -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+    
 <body>
+  <div class="title">
+    <h2>Discover Cultural Heritage in Lecce</h2>
+
+    <div class="menu">
+      <a href="index.html"><button class="feature-button">Homepage</button></a>
+    </div> 
+
+    <!-- Replace the Google Maps element with the Mapbox iframe -->
+    <div id="map"></div>
 
 
-      <div class="title">
-        <h2>Discover Cultural Heritage in Lecce</h2>
+  </div>
 
-        <div class="menu">
-            <a href="index.html"><button class="feature-button">Homepage</button></a>
-          </div> 
-          
-          
-  <div id="map"></div>
-  <div id="pano"></div>
-
-        </div>
-      
-
-
-
-  <!-- Load Google Maps API -->
-  <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=marker">
-
-  </script>
-<script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
-  <script src="map.js"></script>
   <div id="map-legend">
     <h3>Cultural Map Legend</h3>
     <ul>
@@ -96,10 +89,173 @@
       <li><span class="legend-icon" style="background-color: green;"></span> Parks</li>
       <li><span class="legend-icon" style="background-color: brown;"></span> Museums</li>
       <li><span class="legend-icon" style="background-color: orange;"></span> Monuments</li>
-      <li><span class="legend-icon" style="background-color: purple;"></span> Food </li>
+      <li><span class="legend-icon" style="background-color: purple;"></span> Food</li>
       <li><span class="legend-icon" style="background-color: blue;"></span> Medical Assistance</li>
     </ul>
   </div>
- 
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiY2hpYWZsdXRlIiwiYSI6ImNsYXFycDR4bjFsNGszbnVyMTAxamxieGQifQ.mMR8W_h87VcnTauKp4MOfQ';
+  
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [18.1740, 40.3520],
+      zoom: 13
+    });
+  
+    const pointsOfInterest = [
+  // Churches - red
+  {
+    "name": "Basilica di Santa Croce",
+    "position": { "lat": 40.35486, "lng": 18.17272 },
+    "color": "red"
+  },
+  {
+    "name": "Chiesa di San Matteo",
+    "position": { "lat": 40.35312, "lng": 18.17220 },
+    "color": "red"
+  },
+  {
+    "name": "Duomo di Lecce",
+    "position": { "lat": 40.3515, "lng": 18.1744 },
+    "color": "red"
+  },
+  {
+    "name": "Chiesa di Santa Chiara",
+    "position": { "lat": 40.35187, "lng": 18.17168 },
+    "color": "red"
+  },
+
+  // Parks - green
+  {
+    "name": "Villa Comunale Giuseppe Garibaldi",
+    "position": { "lat": 40.35497, "lng": 18.17472 },
+    "color": "green"
+  },
+  {
+    "name": "Giardini Pubblici di Lecce",
+    "position": { "lat": 40.3481, "lng": 18.1760 },
+    "color": "green"
+  },
+  {
+    "name": "Parco di Belloluogo",
+    "position": { "lat": 40.3587, "lng": 18.1682 },
+    "color": "green"
+  },
+  {
+    "name": "Bosco di Rauccio (peripheral)",
+    "position": { "lat": 40.4376, "lng": 18.1248 },
+    "color": "green"
+  },
+
+  // Museums - brown
+  {
+    "name": "Museo Sigismondo Castromediano",
+    "position": { "lat": 40.34713, "lng": 18.17051 },
+    "color": "brown"
+  },
+  {
+    "name": "Museo Faggiano",
+    "position": { "lat": 40.3512, "lng": 18.1727 },
+    "color": "brown"
+  },
+  {
+    "name": "Museo della Cartapesta",
+    "position": { "lat": 40.3510, "lng": 18.1771 },
+    "color": "brown"
+  },
+  {
+    "name": "Museo Diocesano di Lecce",
+    "position": { "lat": 40.3514, "lng": 18.1745 },
+    "color": "brown"
+  },
+
+  // Monuments - orange
+  {
+    "name": "Porta Napoli",
+    "position": { "lat": 40.3564, "lng": 18.1716 },
+    "color": "orange"
+  },
+  {
+    "name": "Roman Amphitheatre",
+    "position": { "lat": 40.3522, "lng": 18.1709 },
+    "color": "orange"
+  },
+  {
+    "name": "Obelisco di Lecce",
+    "position": { "lat": 40.3563, "lng": 18.1712 },
+    "color": "orange"
+  },
+  {
+    "name": "Porta Rudiae",
+    "position": { "lat": 40.3548, "lng": 18.1657 },
+    "color": "orange"
+  },
+
+  // Food - purple
+  {
+    "name": "Castello Carlo V",
+    "position": { "lat": 40.3511, "lng": 18.1768 },
+    "color": "purple"
+  },
+  {
+    "name": "Mercato Coperto Sant'Oronzo",
+    "position": { "lat": 40.3515, "lng": 18.1717 },
+    "color": "purple"
+  },
+  {
+    "name": "Osteria degli Spiriti",
+    "position": { "lat": 40.3519, "lng": 18.1755 },
+    "color": "purple"
+  },
+  {
+    "name": "La Cucina di Mamma Elvira",
+    "position": { "lat": 40.3523, "lng": 18.1722 },
+    "color": "purple"
+  },
+
+  // Medical Assistance - blue
+  {
+    "name": "Ospedale Vito Fazzi",
+    "position": { "lat": 40.3345, "lng": 18.1437 },
+    "color": "blue"
+  },
+  {
+    "name": "Croce Rossa Italiana - Comitato di Lecce",
+    "position": { "lat": 40.3476, "lng": 18.1675 },
+    "color": "blue"
+  },
+  {
+    "name": "Centro Medico Santa Lucia",
+    "position": { "lat": 40.3555, "lng": 18.1764 },
+    "color": "blue"
+  },
+  {
+    "name": "Farmacia Calò",
+    "position": { "lat": 40.3509, "lng": 18.1746 },
+    "color": "blue"
+  }
+]
+
+  
+    pointsOfInterest.forEach(poi => {
+      const el = document.createElement('div');
+      el.className = 'marker';
+      el.style.backgroundColor = poi.color;
+      el.style.width = '20px';
+      el.style.height = '20px';
+      el.style.borderRadius = '50%';
+      el.style.border = '2px solid white';
+  
+      new mapboxgl.Marker(el)
+        .setLngLat([poi.position.lng, poi.position.lat])
+        .setPopup(new mapboxgl.Popup().setText(poi.name))
+        .addTo(map);
+    });
+  </script>
+
+
+
 </body>
 </html>
