@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monument Guessing Game</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .genially-container {
+      max-width: 1300px;
+      width: 100%;
+      margin: 2em auto;
+      position: relative;
+    }
+
+    .loader-genially {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      z-index: 10;
+    }
+
+    .genially-embed {
+      width: 100%;
+    }
+
+    header, footer {
+      text-align: center;
+      padding: 1em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Virtual Escape Room</h1>
+    <p>Would you be able to escape?</p>
+  </header>
+
+  <div class="genially-container">
+    <video class="loader-genially" autoplay loop playsinline muted>
+      <source src="https://static.genially.com/resources/loader-default-rebranding.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <div id="67fea6955376d3a8fc5d900b" class="genially-embed"></div>
+  </div>
+
+  <script>
+    (function (d) {
+      var js, id = "genially-embed-js", ref = d.getElementsByTagName("script")[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement("script");
+      js.id = id;
+      js.async = true;
+      js.src = "https://view.genially.com/static/embed/embed.js";
+      ref.parentNode.insertBefore(js, ref);
+    })(document);
+  </script>
+
+<br><br><br><br><br><br>
+  <footer>
+    <p>Discover Salento • Virtual Escape Room</p>
+  </footer>
+</body>
+</html>
