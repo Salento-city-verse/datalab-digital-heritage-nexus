@@ -1,15 +1,6 @@
 let map, marker, infoWindow, panorama;
 
 const lecceCenter = { lat: 40.3520, lng: 18.1740 };
-const categoryLabels = {
-    red: "Church or Basilica",
-    green: "Park",
-    brown: "Museum",
-    orange: "Monument",
-    purple: "Food & Events",
-    blue: "Medical Assistance"
-  };
-
 const pointsOfInterest = [
         // Churches & Basilicas - red
         { name: "Basilica di Santa Croce", position: { lat: 40.3530, lng: 18.1726 }, color: "red" },
@@ -30,7 +21,7 @@ const pointsOfInterest = [
         { name: "Museo Diocesano di Lecce", position: { lat: 40.3514, lng: 18.1745 }, color: "brown" },
       
         // Monuments - orange
-        { name: "Porta Napoli", position: { lat: 40.3564109, lng: 18.1683263 }, color: "orange" },
+        { name: "Porta Napoli", position: { lat: 40.3564109, lng: 18.1716 }, color: "orange" },
         { name: "Roman Amphitheatre", position: { lat: 40.3522, lng: 18.1709 }, color: "orange" },
         { name: "Obelisco di Lecce", position: { lat: 40.3563, lng: 18.1712 }, color: "orange" },
         { name: "Porta Rudiae", position: { lat: 40.3548, lng: 18.1657 }, color: "orange" },
@@ -50,65 +41,76 @@ const pointsOfInterest = [
 ];
 
 async function initMap() {
-    const [{ Map }, { AdvancedMarkerElement, PinElement }] = await Promise.all([
-      google.maps.importLibrary("maps"),
-      google.maps.importLibrary("marker"),
-    ]);
-  
-    map = new Map(document.getElementById("map"), {
-      center: lecceCenter,
-      zoom: 15,
-      mapId: '4504f8b37365c3d0',
-      mapTypeControl: true,
-      streetViewControl: true,
+  const [{ Map }, { AdvancedMarkerElement }] = await Promise.all([
+    google.maps.importLibrary("maps"),
+    google.maps.importLibrary("marker"),
+  ]);
+
+  map = new Map(document.getElementById("map"), {
+    center: lecceCenter,
+    zoom: 15,
+    mapId: '4504f8b37365c3d0',
+    mapTypeControl: true,
+    streetViewControl: true,
+  });
+
+  panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), {
+    position: lecceCenter,
+    pov: { heading: 34, pitch: 10 },
+    visible: true,
+  });
+
+  map.setStreetView(panorama);
+
+  pointsOfInterest.forEach(poi => {
+    const pin = new google.maps.marker.PinElement({
+      background: poi.color,
+      borderColor: "#000",
+      glyphColor: "#fff",
     });
   
-    panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), {
-      position: lecceCenter,
-      pov: { heading: 34, pitch: 10 },
-      visible: true,
+    const marker = new AdvancedMarkerElement({
+      map,
+      position: poi.position,
+      title: poi.name,
+      content: pin.element,
     });
   
-    map.setStreetView(panorama);
-  
-    // Shared tooltip instance
-    const hoverInfoWindow = new google.maps.InfoWindow({ disableAutoPan: true });
-  
-    pointsOfInterest.forEach(poi => {
-      const pin = new PinElement({
-        background: poi.color,
-        borderColor: "#000",
-        glyphColor: "#fff",
-      });
-  
-      const marker = new AdvancedMarkerElement({
-        map,
-        position: poi.position,
-        title: poi.name,
-        content: pin.element,
-      });
-  
-      const infoContent = `
-        <div style="font-size:16px; padding: 4px 8px; max-width: 250px;">
-          <strong>${poi.name}</strong><br>
-          <span style="font-size:14px;">Lat: ${poi.position.lat.toFixed(4)}, Lng: ${poi.position.lng.toFixed(4)}</span>
-        </div>
-      `;
-  
-      marker.addListener("mouseover", () => {
-        hoverInfoWindow.setContent(infoContent);
-        hoverInfoWindow.setPosition(poi.position);
-        hoverInfoWindow.open(map);
-      });
-  
-      marker.addListener("mouseout", () => {
-        hoverInfoWindow.close();
-      });
-  
-      marker.addListener("click", () => {
-        panorama.setPosition(poi.position);
-      });
+    // Create a hover info window
+    const hoverInfoWindow = new google.maps.InfoWindow({
+      content: `<div style="font-size:18px;">${poi.name}</div>`,
+      disableAutoPan: true,
     });
-  }
   
-  window.initMap = initMap;
+    // Show info window on hover
+    marker.addListener("mouseover", () => {
+      hoverInfoWindow.setPosition(poi.position);
+      hoverInfoWindow.open(map);
+    });
+  
+    // Hide info window when mouse leaves the marker
+    marker.addListener("mouseout", () => {
+      hoverInfoWindow.close();
+    });
+  
+    // Click still opens the Street View
+    marker.addListener("click", () => {
+      panorama.setPosition(poi.position);
+    });
+  });
+  
+
+}
+
+
+function updateInfoWindow(content, position) {
+  infoWindow.setContent(content);
+  infoWindow.setPosition(position);
+  infoWindow.open({
+    map,
+    anchor: marker,
+    shouldFocus: false,
+  });
+}
+
+window.initMap = initMap;
