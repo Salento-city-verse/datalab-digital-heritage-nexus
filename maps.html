@@ -3,259 +3,385 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Discover Lecce - Sustainability Optimization</title>
-  <link rel="stylesheet" href="style.css" />
-  
+  <title>Lecce Cultural Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    h1 {
       text-align: center;
-      background-color: #ffffff;
+      margin: 1rem 0;
+      color: #2c3e50;
     }
 
     h2 {
-      margin: 20px;
+      text-align: center;
+      margin: 1rem 0;
+      color: #2c3e50;
     }
 
     #map {
-      height: 700px;
+      height: 90vh;
       width: 90%;
-      margin: 0 auto 20px auto;
-      border: 2px solid #ccc;
-      border-radius: 8px;
+      margin: 0 auto;
+      border-radius: 10px;
     }
 
-    #toggleBtn {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      border: none;
-      background-color: #4285F4;
-      color: white;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-      margin-bottom: 10px;
+    .top-controls {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
     }
 
-    #pano {
-      height: 700px;
-      width: 90%;
-      margin: 0 auto 20px auto;
-      border: 2px solid #ccc;
-      border-radius: 8px;
+    .legend {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+  max-width: 200px;
+}
+
+
+    .legend div {
+      margin: 4px 0;
     }
 
-    #place-autocomplete-card {
-      background: white;
-      border-radius: 8px;
-      padding: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      margin: 10px;
-    }
+    /* Base button styles */
+.filter-btn, .route-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-    gmp-place-autocomplete {
-      width: 300px;
-    }
+/* Hover effect for buttons */
+.filter-btn:hover, .route-btn:hover {
+  background-color: #3498db;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
 
-    #toggleBtn:hover {
-      background-color: #357ae8;
-    }
+/* Active state styling */
+.filter-btn.active, .route-btn.active {
+  background-color: #3498db;
+  color: white;
+  transform: translateY(0); /* Reset transform on active */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Focused buttons for better accessibility */
+.filter-btn:focus, .route-btn:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.7);
+}
+
+/* Disabled button styling */
+.filter-btn:disabled, .route-btn:disabled {
+  background-color: #ddd;
+  color: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Button text adjustments */
+.filter-btn, .route-btn {
+  text-transform: uppercase;
+}
+
+
+.summary-box {
+  text-align: center;
+  margin: 1rem auto;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  width: 80%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.summary-box:hover {
+  transform: scale(1.05);
+  background-color: #ecf0f1;
+}
+
+.summary-box p {
+  margin: 10px 0;
+  color: #333;
+  font-weight: 600;
+}
+
+.summary-box .icon {
+  font-size: 2rem;
+  color: #3498db;
+  margin-bottom: 10px;
+}
+
+.summary-box .info {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.summary-box .info span {
+  font-weight: bold;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.summary-box {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
   </style>
 </head>
-<!-- Add inside <head> -->
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
-    
 <body>
-  <div class="title">
-    <h2>Discover Cultural Heritage in Lecce</h2>
 
-    <div class="menu">
-      <a href="index.html"><button class="feature-button">Homepage</button></a>
-    </div> 
+<h1>Lecce Cultural Heritage Map</h1>
 
-    <!-- Replace the Google Maps element with the Mapbox iframe -->
-    <div id="map"></div>
+<div class="top-controls" id="filterButtons"></div>
 
+<h2>Choose your itinerary</h2>
 
-  </div>
+<div class="top-controls" id="routeButtons"></div>
+<div class="summary-box" id="routeSummary"></div>
+<div id="map"></div>
 
-  <div id="map-legend">
-    <h3>Cultural Map Legend</h3>
-    <ul>
-      <li><span class="legend-icon" style="background-color: red;"></span> Churches & Basilicas</li>
-      <li><span class="legend-icon" style="background-color: green;"></span> Parks</li>
-      <li><span class="legend-icon" style="background-color: brown;"></span> Museums</li>
-      <li><span class="legend-icon" style="background-color: orange;"></span> Monuments</li>
-      <li><span class="legend-icon" style="background-color: purple;"></span> Food</li>
-      <li><span class="legend-icon" style="background-color: blue;"></span> Medical Assistance</li>
-    </ul>
-  </div>
+<div class="legend" id="legend">
+  <strong>Legend:</strong>
+  <div><span style="color: orange;">●</span> Monuments</div>
+  <div><span style="color: red;">●</span> Churches</div>
+  <div><span style="color: brown;">●</span> Museums</div>
+  <div><span style="color: green;">●</span> Parks</div>
+  <div><span style="color: purple;">●</span> Food</div>
+  <div><span style="color: blue;">●</span> Medical</div>
+</div>
 
-  <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiY2hpYWZsdXRlIiwiYSI6ImNsYXFycDR4bjFsNGszbnVyMTAxamxieGQifQ.mMR8W_h87VcnTauKp4MOfQ';
-  
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: [18.1740, 40.3520],
-      zoom: 13
-    });
-  
-    const pointsOfInterest = [
-  // Churches - red
-  {
-    "name": "Basilica di Santa Croce",
-    "position": { "lat": 40.35486, "lng": 18.17272 },
-    "color": "red"
-  },
-  {
-    "name": "Chiesa di San Matteo",
-    "position": { "lat": 40.35312, "lng": 18.17220 },
-    "color": "red"
-  },
-  {
-    "name": "Duomo di Lecce",
-    "position": { "lat": 40.3515, "lng": 18.1744 },
-    "color": "red"
-  },
-  {
-    "name": "Chiesa di Santa Chiara",
-    "position": { "lat": 40.35187, "lng": 18.17168 },
-    "color": "red"
-  },
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+// POINTS DATA
+const points = [
+{ "name": "Anfiteatro Romano", "lat": 40.3527, "lng": 18.1726, "color": "orange", "category": "Monuments" },
+  { "name": "Villa Comunale", "lat": 40.3549, "lng": 18.1747, "color": "green", "category": "Parks" },
+  { "name": "Palazzo dei Celestini", "lat": 40.3526, "lng": 18.1755, "color": "orange", "category": "Monuments" },
+  { "name": "Piazza Sant'Oronzo", "lat": 40.3528, "lng": 18.1718, "color": "orange", "category": "Monuments" },
+  { "name": "400 Gradi", "lat": 40.3535, "lng": 18.1732, "color": "purple", "category": "Food" },
+  { "name": "Cattedrale di Lecce", "lat": 40.3515, "lng": 18.1744, "color": "red", "category": "Churches" },
+  { "name": "Porta San Biagio", "lat": 40.3493, "lng": 18.1746, "color": "orange", "category": "Monuments" },
+  { "name": "Castello Carlo V", "lat": 40.3511, "lng": 18.1768, "color": "orange", "category": "Monuments" },
+  { "name": "Teatro Politeama Greco", "lat": 40.3537, "lng": 18.1736, "color": "orange", "category": "Monuments" },
+  { "name": "Teatro Apollo", "lat": 40.3531, "lng": 18.1761, "color": "orange", "category": "Monuments" },
+  { "name": "Natale Gelateria", "lat": 40.3521, "lng": 18.1733, "color": "purple", "category": "Food" },
+  { "name": "Alvino Bar", "lat": 40.3530, "lng": 18.1729, "color": "purple", "category": "Food" },
+  { "name": "Museo Sigismondo Castromediano", "lat": 40.3505, "lng": 18.1760, "color": "brown", "category": "Museums" },
+  { "name": "Museo Diocesano di Lecce", "lat": 40.3517, "lng": 18.1741, "color": "brown", "category": "Museums" },
+  { "name": "Chiesa di Santa Croce", "lat": 40.3539, "lng": 18.1720, "color": "red", "category": "Churches" },
+  { "name": "Porta Napoli", "lat": 40.3565, "lng": 18.1725, "color": "orange", "category": "Monuments" },
+  { "name": "Ospedale Vito Fazzi", "lat": 40.3580, "lng": 18.1650, "color": "blue", "category": "Medical" },
+  { "name": "Farmacia Centrale", "lat": 40.3525, "lng": 18.1723, "color": "blue", "category": "Medical" },
+  { "name": "Giardino del Palazzo del Governo", "lat": 40.3528, "lng": 18.1758, "color": "green", "category": "Parks" },
+  { "name": "Piazza Duomo", "lat": 40.3516, "lng": 18.1743, "color": "orange", "category": "Monuments" },
+  { "name": "MUST (Museo Storico Città di Lecce)", "lat": 40.3534, "lng": 18.1715, "color": "brown", "category": "Museums" },
+  { "name": "Chiesa di San Matteo", "lat": 40.3541, "lng": 18.1717, "color": "red", "category": "Churches" },
+  { "name": "Chiesa di Santa Chiara", "lat": 40.3533, "lng": 18.1719, "color": "red", "category": "Churches" },
+  { "name": "Museo Faggiano", "lat": 40.3536, "lng": 18.1723, "color": "brown", "category": "Museums" },
+  { "name": "Basilica di Santa Caterina d'Alessandria", "lat": 40.3640, "lng": 18.1758, "color": "red", "category": "Churches" },
+  { "name": "Monastero degli Olivetani", "lat": 40.3558, "lng": 18.1698, "color": "orange", "category": "Monuments" },
+  { "name": "Anfiteatro di Lecce (outside city walls)", "lat": 40.3480, "lng": 18.1685, "color": "orange", "category": "Monuments" },
+  { "name": "Orto Botanico dell'Università del Salento", "lat": 40.3465, "lng": 18.1660, "color": "green", "category": "Parks" },
+  { "name": "Palazzo del Seminario", "lat": 40.3518, "lng": 18.1746, "color": "orange", "category": "Monuments" },
+  { "name": "Pasticceria Andrea", "lat": 40.3523, "lng": 18.1730, "color": "purple", "category": "Food" },
+  { "name": "Osteria degli Spiriti", "lat": 40.3532, "lng": 18.1725, "color": "purple", "category": "Food" },
+  { "name": "Convitto Palmieri", "lat": 40.3538, "lng": 18.1722, "color": "orange", "category": "Monuments" },
+  { "name": "Chiesa di San Sebastiano", "lat": 40.3545, "lng": 18.1733, "color": "red", "category": "Churches" },
+  { "name": "Palazzo Adorno", "lat": 40.3530, "lng": 18.1715, "color": "orange", "category": "Monuments" },
+  { "name": "Antica Farmacia Provenzano", "lat": 40.3533, "lng": 18.1727, "color": "blue", "category": "Medical" },
+  { "name": "ASL Lecce - Distretto Socio Sanitario", "lat": 40.3570, "lng": 18.1680, "color": "blue", "category": "Medical" },
+  { "name": "Parco di Belloluogo", "lat": 40.3595, "lng": 18.1820, "color": "green", "category": "Parks" },
+  { "name": "Pinacoteca di Arte Francescana", "lat": 40.3535, "lng": 18.1718, "color": "brown", "category": "Museums" },
+  { "name": "Chiesa del Carmine", "lat": 40.3548, "lng": 18.1710, "color": "red", "category": "Churches" }
+]; // Paste your full points array here from your last message
 
-  // Parks - green
+// ITINERARIES
+const itineraries = [
   {
-    "name": "Villa Comunale Giuseppe Garibaldi",
-    "position": { "lat": 40.35497, "lng": 18.17472 },
-    "color": "green"
+    name: "Classic Tour",
+    stops: ["Anfiteatro Romano", "Villa Comunale", "Palazzo dei Celestini", "400 Gradi", "Piazza Sant'Oronzo"]
   },
   {
-    "name": "Giardini Pubblici di Lecce",
-    "position": { "lat": 40.3481, "lng": 18.1760 },
-    "color": "green"
+    name: "Spiritual Path",
+    stops: ["Cattedrale di Lecce", "Chiesa di Santa Croce", "Piazza Duomo", "Chiesa di San Matteo", "Chiesa del Carmine"]
   },
   {
-    "name": "Parco di Belloluogo",
-    "position": { "lat": 40.3587, "lng": 18.1682 },
-    "color": "green"
+    name: "Museum Lovers",
+    stops: ["MUST (Museo Storico Città di Lecce)", "Museo Faggiano", "Museo Diocesano di Lecce", "Museo Sigismondo Castromediano"]
   },
   {
-    "name": "Bosco di Rauccio (peripheral)",
-    "position": { "lat": 40.4376, "lng": 18.1248 },
-    "color": "green"
-  },
-
-  // Museums - brown
-  {
-    "name": "Museo Sigismondo Castromediano",
-    "position": { "lat": 40.34713, "lng": 18.17051 },
-    "color": "brown"
+    name: "Food & Fun",
+    stops: ["Alvino Bar", "Natale Gelateria", "Pasticceria Andrea", "Osteria degli Spiriti", "400 Gradi"]
   },
   {
-    "name": "Museo Faggiano",
-    "position": { "lat": 40.3512, "lng": 18.1727 },
-    "color": "brown"
-  },
-  {
-    "name": "Museo della Cartapesta",
-    "position": { "lat": 40.3510, "lng": 18.1771 },
-    "color": "brown"
-  },
-  {
-    "name": "Museo Diocesano di Lecce",
-    "position": { "lat": 40.3514, "lng": 18.1745 },
-    "color": "brown"
-  },
-
-  // Monuments - orange
-  {
-    "name": "Porta Napoli",
-    "position": { "lat": 40.3564, "lng": 18.1716 },
-    "color": "orange"
-  },
-  {
-    "name": "Roman Amphitheatre",
-    "position": { "lat": 40.3522, "lng": 18.1709 },
-    "color": "orange"
-  },
-  {
-    "name": "Obelisco di Lecce",
-    "position": { "lat": 40.3563, "lng": 18.1712 },
-    "color": "orange"
-  },
-  {
-    "name": "Porta Rudiae",
-    "position": { "lat": 40.3548, "lng": 18.1657 },
-    "color": "orange"
-  },
-
-  // Food - purple
-  {
-    "name": "Castello Carlo V",
-    "position": { "lat": 40.3511, "lng": 18.1768 },
-    "color": "purple"
-  },
-  {
-    "name": "Mercato Coperto Sant'Oronzo",
-    "position": { "lat": 40.3515, "lng": 18.1717 },
-    "color": "purple"
-  },
-  {
-    "name": "Osteria degli Spiriti",
-    "position": { "lat": 40.3519, "lng": 18.1755 },
-    "color": "purple"
-  },
-  {
-    "name": "La Cucina di Mamma Elvira",
-    "position": { "lat": 40.3523, "lng": 18.1722 },
-    "color": "purple"
-  },
-
-  // Medical Assistance - blue
-  {
-    "name": "Ospedale Vito Fazzi",
-    "position": { "lat": 40.3345, "lng": 18.1437 },
-    "color": "blue"
-  },
-  {
-    "name": "Croce Rossa Italiana - Comitato di Lecce",
-    "position": { "lat": 40.3476, "lng": 18.1675 },
-    "color": "blue"
-  },
-  {
-    "name": "Centro Medico Santa Lucia",
-    "position": { "lat": 40.3555, "lng": 18.1764 },
-    "color": "blue"
-  },
-  {
-    "name": "Farmacia Calò",
-    "position": { "lat": 40.3509, "lng": 18.1746 },
-    "color": "blue"
+    name: "Green Escape",
+    stops: ["Villa Comunale", "Giardino del Palazzo del Governo", "Parco di Belloluogo", "Orto Botanico dell'Università del Salento"]
   }
-]
+];
 
-  
-    pointsOfInterest.forEach(poi => {
-      const el = document.createElement('div');
-      el.className = 'marker';
-      el.style.backgroundColor = poi.color;
-      el.style.width = '20px';
-      el.style.height = '20px';
-      el.style.borderRadius = '50%';
-      el.style.border = '2px solid white';
-  
-      new mapboxgl.Marker(el)
-        .setLngLat([poi.position.lng, poi.position.lat])
-        .setPopup(new mapboxgl.Popup().setText(poi.name))
-        .addTo(map);
-    });
-  </script>
+// MAP SETUP
+const map = L.map('map').setView([40.3527, 18.174], 15);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        const icons = {};
+const markerGroup = {};
+const selectedCategories = new Set();
+const selectedRoutes = new Set();
+const routePolylines = {};
+
+// Function to create custom icon
+function createIcon(color) {
+  return L.divIcon({
+    className: 'custom-icon',
+    html: `<div style="background:${color}; width:18px; height:18px; border-radius:50%; border:2px solid white;"></div>`,
+    iconSize: [18, 18],
+    iconAnchor: [9, 9]
+  });
+}
+
+// MARKERS: Create and add markers to the map
+points.forEach(p => {
+  if (!icons[p.color]) {
+    icons[p.color] = createIcon(p.color);
+  }
+  const marker = L.marker([p.lat, p.lng], { icon: icons[p.color] }).addTo(map);
+  marker.bindPopup(`<b>${p.name}</b><br>${p.category}`);
+  marker.on('click', () => {
+    map.flyTo([p.lat, p.lng], 17);
+  });
+
+  if (!markerGroup[p.category]) markerGroup[p.category] = [];
+  markerGroup[p.category].push(marker);
+});
+
+// FILTER BUTTONS: Set all filter buttons to be active by default
+const filterButtons = document.querySelectorAll('.filter-btn');
+filterButtons.forEach(button => {
+  button.classList.add('active');
+});
+
+// Add event listeners to toggle filters
+const filterDiv = document.getElementById('filterButtons');
+[...new Set(points.map(p => p.category))].forEach(category => {
+  const btn = document.createElement('button');
+  btn.className = 'filter-btn active'; // Start with active class
+  btn.innerText = category;
+
+  // Activate/deactivate markers for the category
+  btn.onclick = () => {
+    btn.classList.toggle('active');
+    if (selectedCategories.has(category)) {
+      selectedCategories.delete(category);
+      markerGroup[category].forEach(m => map.removeLayer(m));
+    } else {
+      selectedCategories.add(category);
+      markerGroup[category].forEach(m => map.addLayer(m));
+    }
+  };
+
+  // Add button to filterDiv
+  filterDiv.appendChild(btn);
+
+  // Initially add markers for active categories
+  if (btn.classList.contains('active')) {
+    selectedCategories.add(category);
+    markerGroup[category].forEach(m => map.addLayer(m));
+  }
+});
+
+// ROUTE BUTTONS: Handle route button clicks
+const routeDiv = document.getElementById('routeButtons');
+const summaryDiv = document.getElementById('routeSummary');
+
+// Create route buttons and handle the drawing of routes
+itineraries.forEach((it, idx) => {
+  const btn = document.createElement('button');
+  btn.className = 'route-btn';
+  btn.innerText = it.name;
+  btn.onclick = () => {
+    const isActive = btn.classList.toggle('active'); // Toggle active class
+    if (isActive) {
+      selectedRoutes.add(it.name); // Add route to selectedRoutes
+      drawRoute(it); // Call the function to draw the route
+    } else {
+      selectedRoutes.delete(it.name); // Remove route from selectedRoutes
+      map.removeLayer(routePolylines[it.name]); // Remove the drawn route from the map
+      routePolylines[it.name] = null;
+      summaryDiv.innerHTML = ""; // Clear route summary
+    }
+  };
+
+  // Add route button to routeDiv
+  routeDiv.appendChild(btn);
+});
 
 
+// DRAW ROUTE FUNCTION
+function drawRoute(itinerary) {
+  const stops = itinerary.stops.map(name => points.find(p => p.name === name));
+  const latlngs = stops.map(p => [p.lat, p.lng]);
+
+  const polyline = L.polyline(latlngs, { color: 'dodgerblue', weight: 4 }).addTo(map);
+  routePolylines[itinerary.name] = polyline;
+
+  // Compute stats
+  let categories = {};
+  let dist = 0;
+  for (let i = 0; i < stops.length; i++) {
+    categories[stops[i].category] = (categories[stops[i].category] || 0) + 1;
+    if (i < stops.length - 1) {
+      dist += map.distance([stops[i].lat, stops[i].lng], [stops[i+1].lat, stops[i+1].lng]);
+    }
+  }
+
+  const total = stops.length;
+  const km = (dist / 1000).toFixed(2);
+  const mins = Math.round(dist / 75); // avg walking speed 4km/h
+
+  let categoryText = Object.entries(categories).map(([cat, val]) =>
+    `${cat}: ${(val/total*100).toFixed(0)}%`
+  ).join(' &bull; ');
+
+  summaryDiv.innerHTML = `
+    <strong>${itinerary.name}</strong><br>
+    Includes: ${itinerary.stops.join(', ')}<br>
+    Distance: ${km} km (~${mins} mins walk)<br>
+    ${categoryText}
+  `;
+}
+</script>
 
 </body>
 </html>

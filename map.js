@@ -1,116 +1,191 @@
-let map, marker, infoWindow, panorama;
+// Define map
+const map = L.map('map').setView([40.3527, 18.1726], 15);
 
-const lecceCenter = { lat: 40.3520, lng: 18.1740 };
-const pointsOfInterest = [
-        // Churches & Basilicas - red
-        { name: "Basilica di Santa Croce", position: { lat: 40.3530, lng: 18.1726 }, color: "red" },
-        { name: "Chiesa di San Matteo", position: { lat: 40.3506, lng: 18.1718 }, color: "red" },
-        { name: "Duomo di Lecce", position: { lat: 40.3516, lng: 18.1744 }, color: "red" },
-        { name: "Chiesa di Santa Chiara", position: { lat: 40.3527, lng: 18.1723 }, color: "red" },
-      
-        // Parks - green
-        { name: "Villa Comunale Giuseppe Garibaldi", position: { lat: 40.3478, lng: 18.1754 }, color: "green" },
-        { name: "Giardini Pubblici di Lecce", position: { lat: 40.3481, lng: 18.1760 }, color: "green" },
-        { name: "Parco di Belloluogo", position: { lat: 40.3587, lng: 18.1682 }, color: "green" },
-        { name: "Bosco di Rauccio (peripheral)", position: { lat: 40.4376, lng: 18.1248 }, color: "green" },
-      
-        // Museums - brown
-        { name: "Museo Sigismondo Castromediano", position: { lat: 40.3447, lng: 18.1742 }, color: "brown" },
-        { name: "Museo Faggiano", position: { lat: 40.3512, lng: 18.1727 }, color: "brown" },
-        { name: "Museo della Cartapesta", position: { lat: 40.3510, lng: 18.1771 }, color: "brown" },
-        { name: "Museo Diocesano di Lecce", position: { lat: 40.3514, lng: 18.1745 }, color: "brown" },
-      
-        // Monuments - orange
-        { name: "Porta Napoli", position: { lat: 40.3564109, lng: 18.1716 }, color: "orange" },
-        { name: "Roman Amphitheatre", position: { lat: 40.3522, lng: 18.1709 }, color: "orange" },
-        { name: "Obelisco di Lecce", position: { lat: 40.3563, lng: 18.1712 }, color: "orange" },
-        { name: "Porta Rudiae", position: { lat: 40.3548, lng: 18.1657 }, color: "orange" },
-      
-        // Food - purple
-        { name: "Castello Carlo V", position: { lat: 40.3511, lng: 18.1768 }, color: "purple" },
-        { name: "Mercato Coperto Sant'Oronzo", position: { lat: 40.3515, lng: 18.1717 }, color: "purple" },
-        { name: "Osteria degli Spiriti", position: { lat: 40.3519, lng: 18.1755 }, color: "purple" },
-        { name: "La Cucina di Mamma Elvira", position: { lat: 40.3523, lng: 18.1722 }, color: "purple" },
-      
-        // Medical Assistance - blue
-        { name: "Ospedale Vito Fazzi", position: { lat: 40.3345, lng: 18.1437 }, color: "blue" },
-        { name: "Croce Rossa Italiana - Comitato di Lecce", position: { lat: 40.3476, lng: 18.1675 }, color: "blue" },
-        { name: "Centro Medico Santa Lucia", position: { lat: 40.3555, lng: 18.1764 }, color: "blue" },
-        { name: "Farmacia Calò", position: { lat: 40.3509, lng: 18.1746 }, color: "blue" }
-   
+// Use satellite tiles
+L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+  subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+  maxZoom: 20,
+  attribution: '© Google Maps'
+}).addTo(map);
+
+// All places (your full dataset)
+const places = [/* paste your full array of 40+ places here */];
+
+// Icon sizes
+const categoryIcons = {
+  'Monuments': 'orange',
+  'Parks': 'green',
+  'Food': 'purple',
+  'Churches': 'red',
+  'Museums': 'brown',
+  'Medical': 'blue'
+};
+
+function createIcon(color) {
+  return L.circleMarker([0, 0], {
+    radius: 10,
+    color: color,
+    fillColor: color,
+    fillOpacity: 0.9,
+    weight: 2
+  });
+}
+
+// Layers and filters
+const markers = [];
+const categoryLayers = {};
+const activeFilters = new Set(Object.keys(categoryIcons));
+
+// Create layer groups
+for (const cat in categoryIcons) {
+  categoryLayers[cat] = L.layerGroup().addTo(map);
+}
+
+// Add markers
+places.forEach(place => {
+  const marker = L.circleMarker([place.lat, place.lng], {
+    radius: 10,
+    color: place.color,
+    fillColor: place.color,
+    fillOpacity: 0.9,
+    weight: 2
+  }).bindPopup(`<strong>${place.name}</strong><br>Category: ${place.category}`)
+    .on('click', () => {
+      map.flyTo([place.lat, place.lng], 17);
+    });
+  marker.category = place.category;
+  markers.push(marker);
+  categoryLayers[place.category].addLayer(marker);
+});
+
+// Add filter buttons
+const filterContainer = document.getElementById('filters');
+Object.keys(categoryIcons).forEach(cat => {
+  const btn = document.createElement('button');
+  btn.textContent = cat;
+  btn.style.backgroundColor = categoryIcons[cat];
+  btn.classList.add('filter-button');
+  btn.classList.add('selected');
+
+  btn.addEventListener('click', () => {
+    if (activeFilters.has(cat)) {
+      activeFilters.delete(cat);
+      map.removeLayer(categoryLayers[cat]);
+      btn.classList.remove('selected');
+    } else {
+      activeFilters.add(cat);
+      map.addLayer(categoryLayers[cat]);
+      btn.classList.add('selected');
+    }
+  });
+
+  filterContainer.appendChild(btn);
+});
+
+// Show all button
+const showAllBtn = document.createElement('button');
+showAllBtn.textContent = "Show All";
+showAllBtn.classList.add('filter-button');
+showAllBtn.addEventListener('click', () => {
+  Object.keys(categoryIcons).forEach(cat => {
+    if (!activeFilters.has(cat)) {
+      activeFilters.add(cat);
+      map.addLayer(categoryLayers[cat]);
+      const btn = [...filterContainer.children].find(b => b.textContent === cat);
+      btn?.classList.add('selected');
+    }
+  });
+});
+filterContainer.appendChild(showAllBtn);
+
+// Itineraries
+const itineraries = [
+  {
+    name: "Classic Culture Tour",
+    stops: ["Anfiteatro Romano", "Villa Comunale", "Palazzo dei Celestini", "400 Gradi", "Piazza Sant'Oronzo"]
+  },
+  {
+    name: "Baroque Pathway",
+    stops: ["Cattedrale di Lecce", "Piazza Duomo", "Chiesa di Santa Croce", "MUST", "Alvino Bar"]
+  },
+  {
+    name: "Museums & Gardens",
+    stops: ["Museo Sigismondo Castromediano", "Museo Diocesano di Lecce", "Orto Botanico dell'Università del Salento", "Parco di Belloluogo", "Natale Gelateria"]
+  },
+  {
+    name: "Religious Heritage Walk",
+    stops: ["Chiesa di San Matteo", "Chiesa di Santa Chiara", "Basilica di Santa Caterina d'Alessandria", "Chiesa del Carmine", "Palazzo Adorno"]
+  },
+  {
+    name: "Local Delights & Markets",
+    stops: ["Pasticceria Andrea", "Osteria degli Spiriti", "Convitto Palmieri", "Museo Faggiano", "Teatro Politeama Greco"]
+  },
 ];
 
-async function initMap() {
-  const [{ Map }, { AdvancedMarkerElement }] = await Promise.all([
-    google.maps.importLibrary("maps"),
-    google.maps.importLibrary("marker"),
-  ]);
+// Add itinerary buttons
+const itineraryContainer = document.getElementById('itineraries');
+let activeItineraryLine = null;
+let itineraryMarkers = [];
 
-  map = new Map(document.getElementById("map"), {
-    center: lecceCenter,
-    zoom: 15,
-    mapId: '4504f8b37365c3d0',
-    mapTypeControl: true,
-    streetViewControl: true,
+itineraries.forEach(itinerary => {
+  const btn = document.createElement('button');
+  btn.textContent = itinerary.name;
+  btn.classList.add('itinerary-button');
+
+  btn.addEventListener('click', () => {
+    if (btn.classList.contains('selected')) {
+      // Unselect
+      if (activeItineraryLine) {
+        map.removeLayer(activeItineraryLine);
+        activeItineraryLine = null;
+      }
+      itineraryMarkers.forEach(m => map.removeLayer(m));
+      itineraryMarkers = [];
+      btn.classList.remove('selected');
+      return;
+    }
+
+    // Clear previous
+    document.querySelectorAll('.itinerary-button.selected').forEach(b => b.classList.remove('selected'));
+    if (activeItineraryLine) map.removeLayer(activeItineraryLine);
+    itineraryMarkers.forEach(m => map.removeLayer(m));
+    itineraryMarkers = [];
+
+    // Add new
+    btn.classList.add('selected');
+    const coords = [];
+    itinerary.stops.forEach(name => {
+      const place = places.find(p => p.name === name);
+      if (place) {
+        coords.push([place.lat, place.lng]);
+        const marker = L.marker([place.lat, place.lng]).bindPopup(`<strong>${place.name}</strong>`);
+        marker.addTo(map);
+        itineraryMarkers.push(marker);
+      }
+    });
+
+    activeItineraryLine = L.polyline(coords, { color: 'black', weight: 4 }).addTo(map);
+
+    // Info
+    const distance = coords.reduce((sum, cur, idx, arr) => {
+      if (idx === 0) return 0;
+      const prev = arr[idx - 1];
+      const dist = map.distance(prev, cur);
+      return sum + dist;
+    }, 0);
+
+    const timeMin = Math.round((distance / 80)); // avg walk = 80 m/min
+    const catCount = { Parks: 0, Churches: 0, Food: 0, Monuments: 0, Museums: 0, Medical: 0 };
+    itinerary.stops.forEach(name => {
+      const cat = places.find(p => p.name === name)?.category;
+      if (cat) catCount[cat]++;
+    });
+
+    const total = itinerary.stops.length;
+    const summary = Object.entries(catCount).map(([cat, count]) => `${cat}: ${Math.round((count / total) * 100)}%`).join(', ');
+
+    alert(`Itinerary: ${itinerary.name}\nStops: ${total}\nWalking Distance: ${(distance / 1000).toFixed(2)} km\nTime: ~${timeMin} min\nCategories: ${summary}`);
   });
 
-  panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), {
-    position: lecceCenter,
-    pov: { heading: 34, pitch: 10 },
-    visible: true,
-  });
-
-  map.setStreetView(panorama);
-
-  pointsOfInterest.forEach(poi => {
-    const pin = new google.maps.marker.PinElement({
-      background: poi.color,
-      borderColor: "#000",
-      glyphColor: "#fff",
-    });
-  
-    const marker = new AdvancedMarkerElement({
-      map,
-      position: poi.position,
-      title: poi.name,
-      content: pin.element,
-    });
-  
-    // Create a hover info window
-    const hoverInfoWindow = new google.maps.InfoWindow({
-      content: `<div style="font-size:18px;">${poi.name}</div>`,
-      disableAutoPan: true,
-    });
-  
-    // Show info window on hover
-    marker.addListener("mouseover", () => {
-      hoverInfoWindow.setPosition(poi.position);
-      hoverInfoWindow.open(map);
-    });
-  
-    // Hide info window when mouse leaves the marker
-    marker.addListener("mouseout", () => {
-      hoverInfoWindow.close();
-    });
-  
-    // Click still opens the Street View
-    marker.addListener("click", () => {
-      panorama.setPosition(poi.position);
-    });
-  });
-  
-
-}
-
-
-function updateInfoWindow(content, position) {
-  infoWindow.setContent(content);
-  infoWindow.setPosition(position);
-  infoWindow.open({
-    map,
-    anchor: marker,
-    shouldFocus: false,
-  });
-}
-
-window.initMap = initMap;
+  itineraryContainer.appendChild(btn);
+});
