@@ -1,0 +1,38 @@
+---
+customized_recommendation_task:
+  description: Use {visitor_profile} and {touristic_site_metadata} to generate a detailed
+    list of recommended attractions and points of interest, tailored to the visitor's
+    interests and the unique features of the touristic site.
+  expected_output: A personalized set of attraction recommendations with details on
+    why each recommendation fits the visitor's profile and the site's offerings.
+  async_execution: false
+  agent: tourist_recommendations_expert
+dynamic_arvr_content_task:
+  description: Fetch and integrate AR/VR content from {AR/VR_media_assets} with {touristic_site_metadata}
+    to establish an interactive digital experience that adapts based on visitor interactions.
+  expected_output: A dynamic integration plan outlining which AR/VR content is associated
+    with specific site features, ensuring a seamless digital-physical visitor experience.
+  async_execution: false
+  agent: arvr_integration_specialist
+adaptive_narrative_task:
+  description: Develop adaptable narrative content using {narrative_content} and {touristic_site_metadata}
+    to produce immersive storytelling that reacts to, and enhances, the touristic
+    site's themes and visitor interactions.
+  expected_output: An interactive narrative framework that provides engaging stories
+    and context-aware cues, integrated with both the recommendations and AR/VR features.
+  async_execution: false
+  agent: interactive_story_expert
+agent_collaboration_task:
+  description: Facilitate context sharing among all agents by consolidating outputs
+    from {customized_recommendation_task}, {dynamic_arvr_content_task}, and {adaptive_narrative_task}.
+    This task ensures that all agent outputs are synchronized to deliver a cohesive,
+    adaptive touristic site experience.
+  expected_output: A unified plan that clearly outlines how personalized recommendations,
+    dynamic AR/VR content, and adaptive narratives will integrate to enhance the visitor
+    experience at the touristic site.
+  async_execution: false
+  agent: tourist_recommendations_expert
+  context:
+  - customized_recommendation_task
+  - dynamic_arvr_content_task
+  - adaptive_narrative_task

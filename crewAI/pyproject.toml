@@ -1,0 +1,23 @@
+[project]
+name = "coul_you_pleas_clarif_if_thi_cha_titl_shoul_focu_on_a_cre_automatio_use_cas"
+version = "0.1.0"
+description = "coul_you_pleas_clarif_if_thi_cha_titl_shoul_focu_on_a_cre_automatio_use_cas using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.114.0,<1.0.0"
+]
+
+[project.scripts]
+coul_you_pleas_clarif_if_thi_cha_titl_shoul_focu_on_a_cre_automatio_use_cas = "coul_you_pleas_clarif_if_thi_cha_titl_shoul_focu_on_a_cre_automatio_use_cas.main:run"
+run_crew = "coul_you_pleas_clarif_if_thi_cha_titl_shoul_focu_on_a_cre_automatio_use_cas.main:run"
+train = "coul_you_pleas_clarif_if_thi_cha_titl_shoul_focu_on_a_cre_automatio_use_cas.main:train"
+replay = "coul_you_pleas_clarif_if_thi_cha_titl_shoul_focu_on_a_cre_automatio_use_cas.main:replay"
+test = "coul_you_pleas_clarif_if_thi_cha_titl_shoul_focu_on_a_cre_automatio_use_cas.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
